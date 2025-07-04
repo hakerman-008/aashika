@@ -177,8 +177,10 @@ class DigitalAlbum {
             const pageElement = document.createElement('div');
             pageElement.className = 'page photo-page';
             pageElement.setAttribute('data-page', pageNumber);
+            pageElement.style.position = 'absolute';
             pageElement.style.top = '0';
             pageElement.style.left = '0';
+            pageElement.style.zIndex = '1';
             
             const loveQuotes = this.getLoveQuotes();
             const randomQuotes = this.getRandomQuotes(loveQuotes, 4);
@@ -319,12 +321,14 @@ class DigitalAlbum {
             
             if (index === pageNumber) {
                 page.classList.add('active');
+                page.style.zIndex = '10';
             } else if (index < pageNumber) {
                 page.classList.add('flipped');
+                page.style.zIndex = '1';
             } else {
                 // Pages that haven't been reached yet
                 page.style.transform = 'rotateY(0deg)';
-                page.style.zIndex = '1';
+                page.style.zIndex = '2';
             }
         });
 
