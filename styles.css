@@ -267,6 +267,7 @@ body {
     padding: 30px;
     display: flex;
     position: relative;
+    color: #333;
 }
 
 .photo-page::before {

@@ -167,7 +167,7 @@ class DigitalAlbum {
         const photoPagesContainer = document.getElementById('photoPages');
         photoPagesContainer.innerHTML = '';
 
-        // Group photos into pairs for book spread layout
+        // Create individual pages for book flipping - each page shows 2 photos side by side
         for (let i = 0; i < this.photos.length; i += 2) {
             const leftPhoto = this.photos[i];
             const rightPhoto = this.photos[i + 1];
@@ -262,9 +262,9 @@ class DigitalAlbum {
     }
 
     calculateTotalPages() {
-        // Cover page + photo spread pages (2 photos per page) + end page
+        // Cover page + photo pages (2 photos per page spread) + end page
         const photoPages = Math.ceil(this.photos.length / 2);
-        this.totalPages = 1 + photoPages + 1;
+        this.totalPages = 1 + photoPages + 1; // Cover + photo pages + end
         this.updatePageIndicator();
     }
 
