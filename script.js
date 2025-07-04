@@ -124,19 +124,39 @@ class DigitalAlbum {
         const photoPagesContainer = document.getElementById('photoPages');
         photoPagesContainer.innerHTML = `
             <div class="page photo-page" data-page="1">
-                <div class="page-content">
-                    <div class="photo-container">
-                        <div class="photo-frame">
-                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(45deg, #ff69b4, #ffc0cb); color: white; font-family: 'Dancing Script', cursive; font-size: 2rem; text-align: center;">
-                                <div>
-                                    <p>Upload your photos to the</p>
-                                    <p><strong>'public'</strong> folder</p>
-                                    <p>💕</p>
-                                    <small style="font-size: 1rem;">Name them: photo1.jpg, photo2.jpg, etc.</small>
+                <div class="page-spread">
+                    <div class="left-page">
+                        <div class="photo-container">
+                            <div class="photo-frame">
+                                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(45deg, #ff69b4, #ffc0cb); color: white; font-family: 'Dancing Script', cursive; font-size: 1.5rem; text-align: center;">
+                                    <div>
+                                        <p>Upload photos to</p>
+                                        <p><strong>'public'</strong> folder</p>
+                                        <p>💕</p>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="photo-caption">Her beautiful memories here! 💖</div>
                         </div>
-                        <div class="photo-caption">Add your beautiful memories here! 💖</div>
+                        <div class="love-quote quote-top-left">Your smile lights up my world 💕</div>
+                        <div class="love-quote quote-bottom-left">You're my everything 💞</div>
+                    </div>
+                    <div class="right-page">
+                        <div class="photo-container">
+                            <div class="photo-frame">
+                                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(45deg, #ff1493, #ffc0cb); color: white; font-family: 'Dancing Script', cursive; font-size: 1.5rem; text-align: center;">
+                                    <div>
+                                        <p>Name them:</p>
+                                        <p>photo1.jpg</p>
+                                        <p>photo2.jpg, etc.</p>
+                                        <p>💖</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="photo-caption">More beautiful moments! ✨</div>
+                        </div>
+                        <div class="love-quote quote-top-right">My heart beats your name 💓</div>
+                        <div class="love-quote quote-bottom-right">Forever and always 💍</div>
                     </div>
                 </div>
             </div>
@@ -148,29 +168,100 @@ class DigitalAlbum {
         const photoPagesContainer = document.getElementById('photoPages');
         photoPagesContainer.innerHTML = '';
 
-        this.photos.forEach((photo, index) => {
+        // Group photos into pairs for book spread layout
+        for (let i = 0; i < this.photos.length; i += 2) {
+            const leftPhoto = this.photos[i];
+            const rightPhoto = this.photos[i + 1];
+            const pageNumber = Math.floor(i / 2) + 1;
+            
             const pageElement = document.createElement('div');
             pageElement.className = 'page photo-page';
-            pageElement.setAttribute('data-page', index + 1);
+            pageElement.setAttribute('data-page', pageNumber);
+            
+            const loveQuotes = this.getLoveQuotes();
+            const randomQuotes = this.getRandomQuotes(loveQuotes, 4);
             
             pageElement.innerHTML = `
-                <div class="page-content">
-                    <div class="photo-container">
-                        <div class="photo-frame">
-                            <img src="${photo.src}" alt="Memory ${index + 1}" loading="lazy">
-                        </div>
-                        <div class="photo-caption">${photo.caption}</div>
+                <div class="page-spread">
+                    <div class="left-page">
+                        ${this.createPhotoHTML(leftPhoto, 'left')}
+                        <div class="love-quote quote-top-left">${randomQuotes[0]}</div>
+                        <div class="love-quote quote-bottom-left">${randomQuotes[1]}</div>
+                    </div>
+                    <div class="right-page">
+                        ${rightPhoto ? this.createPhotoHTML(rightPhoto, 'right') : ''}
+                        <div class="love-quote quote-top-right">${randomQuotes[2]}</div>
+                        ${rightPhoto ? `<div class="love-quote quote-bottom-right">${randomQuotes[3]}</div>` : `<div class="love-quote quote-center-right">${randomQuotes[3]}</div>`}
                     </div>
                 </div>
             `;
 
             photoPagesContainer.appendChild(pageElement);
-        });
+        }
+    }
+
+    createPhotoHTML(photo, side) {
+        if (!photo) return '';
+        
+        return `
+            <div class="photo-container">
+                <div class="photo-frame">
+                    <img src="${photo.src}" alt="Beautiful Memory" loading="lazy">
+                </div>
+                <div class="photo-caption">${photo.caption}</div>
+            </div>
+        `;
+    }
+
+    getLoveQuotes() {
+        return [
+            "Your smile is my favorite curve 💕",
+            "You're my today and all my tomorrows ✨",
+            "In your eyes, I found my home 🏠",
+            "You make ordinary moments extraordinary 🌟",
+            "My heart beats your name 💓",
+            "You're the reason I believe in love 💖",
+            "Every day with you is a blessing 🙏",
+            "You're my sunshine on cloudy days ☀️",
+            "Your laugh is my favorite sound 🎵",
+            "You complete my soul 💫",
+            "Forever isn't long enough with you ♾️",
+            "You're my greatest adventure 🌍",
+            "Your love is my strength 💪",
+            "You make me a better person 🌸",
+            "My heart chose you 💘",
+            "You're my happy place 🌈",
+            "Love you beyond words 📝",
+            "You're my everything 💞",
+            "My favorite hello, hardest goodbye 👋",
+            "You're worth every star in the sky ⭐",
+            "Your beauty takes my breath away 😍",
+            "You're my dream come true 🌙",
+            "My love for you grows daily 📈",
+            "You're my forever and always 💍",
+            "Your heart is my treasure 💎",
+            "You make me feel alive 🔥",
+            "My angel on earth 👼",
+            "You're my miracle 🌟",
+            "Your love is my compass 🧭",
+            "You're my perfect match 🧩",
+            "My heart belongs to you 💝",
+            "You're my greatest love story 📖",
+            "Your presence is a gift 🎁",
+            "You're my safe haven ⚓",
+            "My queen, my everything 👑"
+        ];
+    }
+
+    getRandomQuotes(quotes, count) {
+        const shuffled = [...quotes].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
     }
 
     calculateTotalPages() {
-        // Cover page + photo pages + end page
-        this.totalPages = 1 + this.photos.length + 1;
+        // Cover page + photo spread pages (2 photos per page) + end page
+        const photoPages = Math.ceil(this.photos.length / 2);
+        this.totalPages = 1 + photoPages + 1;
         this.updatePageIndicator();
     }
 
