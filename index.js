@@ -12,6 +12,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Add route for /aashika
+app.get('/aashika', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+
 // Start the server
 app.listen(port, '0.0.0.0', () => {
     console.log(`💝 Your romantic surprise is running on port ${port}`);
