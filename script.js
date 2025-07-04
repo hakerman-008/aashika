@@ -61,16 +61,11 @@ class DigitalAlbum {
             // For now, we'll simulate loading photos from the public folder
             const photoFolder = 'public/';
             
-            // This is a simulation - in reality, you'd have a proper API or file listing
-            // You can add photo filenames here as you upload them
-            const photoFiles = [
-                'photo1.jpg',
-                'photo2.jpg',
-                'photo3.jpg',
-                'photo4.jpg',
-                'photo5.jpg'
-                // Add more photo filenames here
-            ];
+            // Generate photo filenames for all uploaded photos
+            const photoFiles = [];
+            for (let i = 1; i <= 35; i++) {
+                photoFiles.push(`photo${i}.jpg`);
+            }
 
             // Filter out files that actually exist
             const validPhotos = [];
@@ -99,18 +94,28 @@ class DigitalAlbum {
     }
 
     generateCaption(filename) {
-        // Generate romantic captions based on filename or use random ones
+        // Generate romantic captions for her beautiful photos
         const captions = [
-            "A moment frozen in time 💕",
-            "When love speaks through smiles ❤️",
-            "Our hearts beating as one 💖",
-            "Pure joy captured forever 🌹",
-            "Love in its purest form 💝",
-            "Together is our favorite place 🥰",
-            "Every picture tells our story 📸",
-            "Made for each other 💞",
-            "Love like this is rare 🌟",
-            "Our perfect moment 💫"
+            "Your smile lights up my world 💕",
+            "Absolutely breathtaking ❤️",
+            "An angel in my eyes 👑",
+            "Pure beauty captured forever 🌹",
+            "You're my sunshine ☀️",
+            "Perfection has a name - it's you 💝",
+            "Every photo shows your magic ✨",
+            "My heart skips a beat 💞",
+            "Beauty beyond words 🌟",
+            "You make everything beautiful 💫",
+            "My favorite masterpiece 🎨",
+            "Radiant as always 🌺",
+            "Simply stunning 💖",
+            "You're my dream come true 🌙",
+            "Elegance personified 👸",
+            "My beautiful queen 💎",
+            "Grace and beauty combined 🦋",
+            "You steal my breath away 💨",
+            "Perfect in every way 🌈",
+            "My heart's desire 💘"
         ];
         return captions[Math.floor(Math.random() * captions.length)];
     }
