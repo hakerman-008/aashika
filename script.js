@@ -177,6 +177,8 @@ class DigitalAlbum {
             const pageElement = document.createElement('div');
             pageElement.className = 'page photo-page';
             pageElement.setAttribute('data-page', pageNumber);
+            pageElement.style.top = '0';
+            pageElement.style.left = '0';
             
             const loveQuotes = this.getLoveQuotes();
             const randomQuotes = this.getRandomQuotes(loveQuotes, 4);
@@ -269,9 +271,18 @@ class DigitalAlbum {
         if (this.isFlipping || this.currentPage >= this.totalPages - 1) return;
         
         this.isFlipping = true;
+        const currentPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
+        
+        if (currentPageElement) {
+            currentPageElement.classList.add('turning');
+        }
+        
         this.currentPage++;
-        this.flipToPage(this.currentPage);
-        this.addHeartBurst();
+        
+        setTimeout(() => {
+            this.flipToPage(this.currentPage);
+            this.addHeartBurst();
+        }, 100);
         
         setTimeout(() => {
             this.isFlipping = false;
@@ -282,9 +293,18 @@ class DigitalAlbum {
         if (this.isFlipping || this.currentPage <= 0) return;
         
         this.isFlipping = true;
+        
         this.currentPage--;
-        this.flipToPage(this.currentPage);
-        this.addHeartBurst();
+        const targetPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
+        
+        if (targetPageElement) {
+            targetPageElement.classList.add('turning');
+        }
+        
+        setTimeout(() => {
+            this.flipToPage(this.currentPage);
+            this.addHeartBurst();
+        }, 100);
         
         setTimeout(() => {
             this.isFlipping = false;
@@ -295,12 +315,16 @@ class DigitalAlbum {
         const allPages = document.querySelectorAll('.page');
         
         allPages.forEach((page, index) => {
-            page.classList.remove('active', 'flipped', 'next', 'flipping-in', 'flipping-out');
+            page.classList.remove('active', 'flipped', 'turning');
             
             if (index === pageNumber) {
-                page.classList.add('active', 'flipping-in');
+                page.classList.add('active');
             } else if (index < pageNumber) {
                 page.classList.add('flipped');
+            } else {
+                // Pages that haven't been reached yet
+                page.style.transform = 'rotateY(0deg)';
+                page.style.zIndex = '1';
             }
         });
 
