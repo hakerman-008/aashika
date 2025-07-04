@@ -13,8 +13,7 @@ class DigitalAlbum {
         this.setupEventListeners();
         await this.loadPhotos();
         this.setupMusic();
-        this.updatePageIndicator();
-        this.updateNavigationButtons();
+        this.initializePageStates();
         this.addFlipAnimations();
     }
 
@@ -276,55 +275,98 @@ class DigitalAlbum {
         const currentPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
         
         if (currentPageElement) {
+            // Add turning animation to current page
             currentPageElement.classList.add('turning');
+            currentPageElement.style.zIndex = '15';
         }
         
-        this.currentPage++;
-        
+        // Start the flip animation
         setTimeout(() => {
-            this.flipToPage(this.currentPage);
+            if (currentPageElement) {
+                currentPageElement.classList.add('flipped');
+                currentPageElement.classList.remove('active');
+            }
+            
+            this.currentPage++;
+            const nextPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
+            if (nextPageElement) {
+                nextPageElement.classList.add('active');
+                nextPageElement.classList.remove('flipped');
+                nextPageElement.style.zIndex = '10';
+            }
+            
+            this.updatePageIndicator();
+            this.updateNavigationButtons();
             this.addHeartBurst();
-        }, 100);
+        }, 600); // Mid-way through animation
         
+        // Clean up animation classes
         setTimeout(() => {
+            if (currentPageElement) {
+                currentPageElement.classList.remove('turning');
+                currentPageElement.style.zIndex = '1';
+            }
             this.isFlipping = false;
-        }, 1000);
+        }, 1200);
     }
 
     previousPage() {
         if (this.isFlipping || this.currentPage <= 0) return;
         
         this.isFlipping = true;
+        const currentPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
         
         this.currentPage--;
-        const targetPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
+        const previousPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
         
-        if (targetPageElement) {
-            targetPageElement.classList.add('turning');
+        if (previousPageElement) {
+            // Add turning back animation to previous page
+            previousPageElement.classList.add('turning-back');
+            previousPageElement.style.zIndex = '15';
         }
         
+        // Start the flip back animation
         setTimeout(() => {
-            this.flipToPage(this.currentPage);
+            if (currentPageElement) {
+                currentPageElement.classList.remove('active');
+                currentPageElement.classList.add('flipped');
+                currentPageElement.style.zIndex = '1';
+            }
+            
+            if (previousPageElement) {
+                previousPageElement.classList.add('active');
+                previousPageElement.classList.remove('flipped');
+            }
+            
+            this.updatePageIndicator();
+            this.updateNavigationButtons();
             this.addHeartBurst();
-        }, 100);
+        }, 600); // Mid-way through animation
         
+        // Clean up animation classes
         setTimeout(() => {
+            if (previousPageElement) {
+                previousPageElement.classList.remove('turning-back');
+                previousPageElement.style.zIndex = '10';
+            }
             this.isFlipping = false;
-        }, 1000);
+        }, 1200);
     }
 
-    flipToPage(pageNumber) {
+    initializePageStates() {
         const allPages = document.querySelectorAll('.page');
         
         allPages.forEach((page, index) => {
-            page.classList.remove('active', 'flipped', 'turning');
+            page.classList.remove('active', 'flipped', 'turning', 'turning-back');
             
-            if (index === pageNumber) {
+            if (index === this.currentPage) {
                 page.classList.add('active');
                 page.style.zIndex = '10';
-            } else if (index < pageNumber) {
+                page.style.transform = 'rotateY(0deg)';
+            } else if (index < this.currentPage) {
                 page.classList.add('flipped');
                 page.style.zIndex = '1';
+                page.style.transform = 'rotateY(-180deg)';
             } else {
                 // Pages that haven't been reached yet
                 page.style.transform = 'rotateY(0deg)';
