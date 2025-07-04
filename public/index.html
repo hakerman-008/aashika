@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story - Digital Album</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background music -->
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="music/love-song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music control button -->
+    <div class="music-control">
+        <button id="musicToggle">🎵</button>
+    </div>
+
+    <!-- Floating hearts animation -->
+    <div class="hearts-container">
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+    </div>
+
+    <!-- Album container -->
+    <div class="album-container">
+        <div class="book" id="photoBook">
+            <!-- Cover page -->
+            <div class="page cover-page active" data-page="0">
+                <div class="page-content cover-content">
+                    <h1 class="love-title">For My Beautiful Angel</h1>
+                    <div class="love-message">
+                        <p class="main-message">To The Most Amazing Girl</p>
+                        <p class="sub-message">You are the most beautiful soul I've ever known. This album is dedicated to you - capturing your radiant smile, your precious moments, and the joy you bring to my world every single day.</p>
+                        <div class="heart-divider">💕</div>
+                        <p class="signature">You mean everything to me</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photo pages will be dynamically generated -->
+            <div id="photoPages"></div>
+
+            <!-- End page -->
+            <div class="page end-page" id="endPage">
+                <div class="page-content end-content">
+                    <h2 class="end-title">The End</h2>
+                    <div class="end-message">
+                        <p>This is just the beginning of our endless love story...</p>
+                        <p>More beautiful memories await us ahead</p>
+                        <div class="infinity-symbol">∞</div>
+                        <p class="final-message">I love you to the moon and back</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation arrows -->
+        <div class="nav-arrow nav-arrow-left" id="prevBtn">
+            <div class="arrow-heart">
+                <span>❮</span>
+                <div class="heart-pulse"></div>
+            </div>
+        </div>
+        <div class="nav-arrow nav-arrow-right" id="nextBtn">
+            <div class="arrow-heart">
+                <span>❯</span>
+                <div class="heart-pulse"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page indicator -->
+    <div class="page-indicator">
+        <span id="currentPage">1</span> / <span id="totalPages">1</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
