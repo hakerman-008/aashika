@@ -183,8 +183,9 @@ class DigitalAlbum {
             const loveQuotes = this.getLoveQuotes();
             const randomQuotes = this.getRandomQuotes(loveQuotes, 4);
             
-            // Show current page content and what will appear after flip
+            // Show current page content and prepare next page content
             const nextPhoto = this.photos[i + 1];
+            const nextRandomQuotes = this.getRandomQuotes(this.getLoveQuotes(), 4);
             
             pageElement.innerHTML = `
                 <div class="page-spread">
@@ -199,12 +200,23 @@ class DigitalAlbum {
                         <div class="love-quote quote-top-right">${randomQuotes[2]}</div>
                         <div class="love-quote quote-bottom-right">${randomQuotes[3]}</div>
                         
-                        <!-- Back side content (what shows when flipped) -->
-                        <div class="right-page-back" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); transform: rotateY(180deg); backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
-                            ${nextPhoto ? this.createPhotoHTML(nextPhoto, 'back') : `
-                                <div class="love-quote" style="position: relative; top: 50%; transform: translateY(-50%);">More beautiful memories coming... 💕</div>
-                            `}
+                        <!-- Back side content (current photo will show on left when flipped) -->
+                        <div class="right-page-back">
+                            ${this.createPhotoHTML(currentPhoto, 'left')}
+                            <div class="love-quote quote-top-left" style="position: absolute; top: 15px; left: 15px; width: 140px;">${randomQuotes[2]}</div>
+                            <div class="love-quote quote-bottom-left" style="position: absolute; bottom: 15px; left: 15px; width: 140px;">${randomQuotes[3]}</div>
                         </div>
+                    </div>
+                    
+                    <!-- Next page content that appears on right during flip -->
+                    <div class="next-page-content">
+                        ${nextPhoto ? this.createPhotoHTML(nextPhoto, 'right') : `
+                            <div class="love-quote quote-center-right">Thank you for all the beautiful memories... 💕</div>
+                        `}
+                        ${nextPhoto ? `
+                            <div class="love-quote quote-top-right" style="position: absolute; top: 15px; right: 15px; width: 140px;">${nextRandomQuotes[0]}</div>
+                            <div class="love-quote quote-bottom-right" style="position: absolute; bottom: 15px; right: 15px; width: 140px;">${nextRandomQuotes[1]}</div>
+                        ` : ''}
                     </div>
                 </div>
             `;
@@ -283,11 +295,18 @@ class DigitalAlbum {
         
         this.isFlipping = true;
         const currentPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
+        const nextPageElement = document.querySelector(`[data-page="${this.currentPage + 1}"]`);
         
         if (currentPageElement) {
             // Add turning animation to current page
             currentPageElement.classList.add('turning');
             currentPageElement.style.zIndex = '15';
+        }
+        
+        // Prepare next page to show its content on the right
+        if (nextPageElement) {
+            nextPageElement.style.zIndex = '8';
+            nextPageElement.classList.add('preparing');
         }
         
         // Start the flip animation
@@ -298,10 +317,9 @@ class DigitalAlbum {
             }
             
             this.currentPage++;
-            const nextPageElement = document.querySelector(`[data-page="${this.currentPage}"]`);
             if (nextPageElement) {
                 nextPageElement.classList.add('active');
-                nextPageElement.classList.remove('flipped');
+                nextPageElement.classList.remove('flipped', 'preparing');
                 nextPageElement.style.zIndex = '10';
             }
             
