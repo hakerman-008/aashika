@@ -1,23 +1,18 @@
 const express = require('express');
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 3000;
 
+// Serve all static files (CSS, JS, images) from "public"
 app.use(express.static('public'));
 
-// Additional security headers
-app.use((req, res, next) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    next();
+// Serve music files from "music" folder (outside public)
+app.use('/music', express.static('music'));
+
+// Send index.html on root request
+app.get('/', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
 });
 
-// Add route for /aashika
-app.get('/aashika', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
-
-// Start the server
-app.listen(port, '0.0.0.0', () => {
-    console.log(`💝 Your romantic surprise is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server started on http://localhost:${PORT}`);
 });
