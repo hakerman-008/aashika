@@ -167,10 +167,9 @@ class DigitalAlbum {
         const photoPagesContainer = document.getElementById('photoPages');
         photoPagesContainer.innerHTML = '';
 
-        // Create individual pages for real book flipping - each page shows 1 photo that will flip from right to left
+        // Create pages for real book flipping - each page spread shows content that can flip
         for (let i = 0; i < this.photos.length; i++) {
             const currentPhoto = this.photos[i];
-            const nextPhoto = this.photos[i + 1];
             const pageNumber = i + 1;
             
             const pageElement = document.createElement('div');
@@ -184,40 +183,31 @@ class DigitalAlbum {
             const loveQuotes = this.getLoveQuotes();
             const randomQuotes = this.getRandomQuotes(loveQuotes, 4);
             
-            // First page shows photo on right side, subsequent pages show current photo on left and next on right
-            if (i === 0) {
-                // First photo page - show only on right side
-                pageElement.innerHTML = `
-                    <div class="page-spread">
-                        <div class="left-page">
+            // Show current page content and what will appear after flip
+            const nextPhoto = this.photos[i + 1];
+            
+            pageElement.innerHTML = `
+                <div class="page-spread">
+                    <div class="left-page">
+                        ${i > 0 ? this.createPhotoHTML(this.photos[i - 1], 'left') : `
                             <div class="love-quote quote-center-left">${randomQuotes[0]}</div>
                             <div class="love-quote quote-bottom-left">${randomQuotes[1]}</div>
-                        </div>
-                        <div class="right-page">
-                            ${this.createPhotoHTML(currentPhoto, 'right')}
-                            <div class="love-quote quote-top-right">${randomQuotes[2]}</div>
-                            <div class="love-quote quote-bottom-right">${randomQuotes[3]}</div>
+                        `}
+                    </div>
+                    <div class="right-page">
+                        ${this.createPhotoHTML(currentPhoto, 'right')}
+                        <div class="love-quote quote-top-right">${randomQuotes[2]}</div>
+                        <div class="love-quote quote-bottom-right">${randomQuotes[3]}</div>
+                        
+                        <!-- Back side content (what shows when flipped) -->
+                        <div class="right-page-back" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); transform: rotateY(180deg); backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
+                            ${nextPhoto ? this.createPhotoHTML(nextPhoto, 'back') : `
+                                <div class="love-quote" style="position: relative; top: 50%; transform: translateY(-50%);">More beautiful memories coming... 💕</div>
+                            `}
                         </div>
                     </div>
-                `;
-            } else {
-                // Subsequent pages - show previous photo on left, current photo on right
-                const prevPhoto = this.photos[i - 1];
-                pageElement.innerHTML = `
-                    <div class="page-spread">
-                        <div class="left-page">
-                            ${this.createPhotoHTML(prevPhoto, 'left')}
-                            <div class="love-quote quote-top-left">${randomQuotes[0]}</div>
-                            <div class="love-quote quote-bottom-left">${randomQuotes[1]}</div>
-                        </div>
-                        <div class="right-page">
-                            ${this.createPhotoHTML(currentPhoto, 'right')}
-                            <div class="love-quote quote-top-right">${randomQuotes[2]}</div>
-                            <div class="love-quote quote-bottom-right">${randomQuotes[3]}</div>
-                        </div>
-                    </div>
-                `;
-            }
+                </div>
+            `;
 
             photoPagesContainer.appendChild(pageElement);
         }

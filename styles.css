@@ -140,52 +140,69 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transform-origin: left center;
-    transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    backface-visibility: visible;
     overflow: hidden;
     box-shadow: inset 0 0 20px rgba(255, 105, 180, 0.1);
-    transform-style: preserve-3d;
     z-index: 1;
 }
 
-.page::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Real book page structure - left and right halves */
+.page-spread {
+    display: flex;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 15px;
-    border: 3px solid #ff69b4;
-    transform: rotateY(180deg);
-    backface-visibility: visible;
-    z-index: -1;
+    position: relative;
+}
+
+.left-page, .right-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    height: 100%;
+}
+
+/* Right page that will flip */
+.right-page {
+    transform-origin: left center;
+    transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    z-index: 2;
+    backface-visibility: hidden;
+}
+
+/* When right page is flipping */
+.page.turning .right-page {
+    transform: rotateY(-180deg);
+    z-index: 15;
+}
+
+/* When right page has flipped over */
+.page.flipped .right-page {
+    transform: rotateY(-180deg);
+    z-index: 5;
 }
 
 .page.active {
-    transform: rotateY(0deg);
     z-index: 10;
 }
 
 .page.flipped {
-    transform: rotateY(-180deg);
-    z-index: 1;
+    z-index: 5;
 }
 
 .page.turning {
     z-index: 15;
-    animation: pageFlip 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 .page.turning-back {
     z-index: 15;
-    animation: pageFlipBack 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.page:not(.active):not(.flipped):not(.turning) {
-    z-index: 2;
+.page.turning-back .right-page {
+    transform: rotateY(0deg);
 }
 
 /* Cover page */
@@ -270,15 +287,17 @@ body {
     color: #333;
 }
 
+/* Center binding line for book effect */
 .photo-page::before {
     content: '';
     position: absolute;
     left: 50%;
-    top: 10%;
-    bottom: 10%;
-    width: 2px;
-    background: linear-gradient(to bottom, transparent, #ff69b4, transparent);
+    top: 5%;
+    bottom: 5%;
+    width: 3px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 105, 180, 0.3), transparent);
     z-index: 1;
+    border-radius: 2px;
 }
 
 .page-spread {
